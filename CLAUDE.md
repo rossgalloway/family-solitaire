@@ -134,8 +134,11 @@ touch new-game routing, preserve that cancellation or stale deals can land.
 
 Capacitor 8 wraps the web build (`webDir: dist`). `src/native/lifecycle.ts`
 guards everything with `Capacitor.isNativePlatform()` so the same bundle runs
-on web. `android/` is committed and built by the `release-apk` GitHub
-workflow (signed APK on each release); `ios/` is still gitignored until
+on web. `android/` is committed and built by the `release-android` GitHub
+workflow, which on each published release signs both an APK (attached to the
+release) and an AAB (a workflow artifact — the Play Store only accepts
+bundles). The keystore in the repo secrets is Play's registered _upload_ key,
+so it must not be rotated casually. `ios/` is still gitignored until
 signing/icons are final.
 
 ## Tests

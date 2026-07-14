@@ -1,4 +1,10 @@
-# Builds a signed Android APK and attaches it to the GitHub Release.
+# Builds the signed Android artifacts for a release:
+#   - an APK, attached to the GitHub Release (direct download / sideload)
+#   - an AAB, uploaded as a workflow artifact (this is what Google Play takes;
+#     Play rejects APKs, and the bundle isn't useful to sideloaders, so it stays
+#     off the public release page)
+#
+# Both come out of a single Gradle invocation, so the AAB is close to free.
 #
 # One-time setup — generate a keystore and add these repo secrets
 # (Settings → Secrets and variables → Actions):
@@ -10,7 +16,11 @@
 #   ANDROID_KEYSTORE_PASSWORD  store password
 #   ANDROID_KEY_ALIAS          key alias (e.g. solitaire)
 #   ANDROID_KEY_PASSWORD       key password
-name: Release APK
+#
+# On Play this keystore is the *upload* key: Play re-signs the bundle with its
+# own app-signing key before shipping it. It must stay the key registered with
+# Play App Signing, or the upload is rejected.
+name: Release Android
 
 on:
   release:
@@ -18,7 +28,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: Existing release tag to build and attach the APK to
+        description: Existing release tag to build the APK and AAB from
         required: true
 
 permissions:
@@ -30,6 +40,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.release.tag_name || github.event.inputs.tag }}
 
       - name: Resolve tag and version numbers
         id: ver
@@ -73,7 +85,7 @@ jobs:
           ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
         run: echo "$ANDROID_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/release.keystore"
 
-      - name: Build signed release APK
+      - name: Build signed release APK and AAB
         working-directory: android
         env:
           ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/release.keystore
@@ -82,19 +94,26 @@ jobs:
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
           ANDROID_VERSION_NAME: ${{ steps.ver.outputs.name }}
           ANDROID_VERSION_CODE: ${{ steps.ver.outputs.code }}
-        run: ./gradlew assembleRelease
+        run: ./gradlew assembleRelease bundleRelease
 
-      - name: Rename APK
+      - name: Collect artifacts
         run: |
           mkdir -p out
           cp android/app/build/outputs/apk/release/app-release.apk \
              "out/solitaire-${{ steps.ver.outputs.name }}.apk"
+          cp android/app/build/outputs/bundle/release/app-release.aab \
+             "out/solitaire-${{ steps.ver.outputs.name }}.aab"
 
-      - name: Verify APK is signed
+      - name: Verify artifacts are signed
         run: |
-          unzip -l "out/solitaire-${{ steps.ver.outputs.name }}.apk" \
-            | grep -qE 'META-INF/.*\.(RSA|EC)' \
-            && echo "APK is signed"
+          for f in out/*.apk out/*.aab; do
+            # minSdk is 23, so AGP applies the v1 (JAR) signature to the APK, and
+            # bundles are always jarsigned — a cert in either confirms the release
+            # keystore was applied rather than a debug fallback.
+            unzip -l "$f" | grep -qE 'META-INF/.*\.(RSA|EC)' \
+              || { echo "ERROR: $f is unsigned — release keystore secrets missing?"; exit 1; }
+            echo "$f is signed"
+          done
 
       - name: Upload APK to release
         env:
@@ -102,3 +121,11 @@ jobs:
         run: |
           gh release upload "${{ steps.ver.outputs.tag }}" \
             "out/solitaire-${{ steps.ver.outputs.name }}.apk" --clobber
+
+      - name: Upload AAB for Play Console
+        uses: actions/upload-artifact@v4
+        with:
+          name: solitaire-${{ steps.ver.outputs.name }}-playstore-aab
+          path: out/solitaire-${{ steps.ver.outputs.name }}.aab
+          if-no-files-found: error
+          retention-days: 90

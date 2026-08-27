@@ -9,6 +9,7 @@ export default defineConfig({
     alias: { '@': path.resolve(__dirname, './src') },
   },
   server: { host: true, port: 5173 },
+  preview: { allowedHosts: ['dev-vm.tail197cc7.ts.net'] },
   test: {
     environment: 'jsdom',
     globals: true,

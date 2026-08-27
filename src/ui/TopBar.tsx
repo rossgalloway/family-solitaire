@@ -74,6 +74,12 @@ export function TopBar({
           {moves}
         </span>
       </div>
+      <h1 className="topbar__birthday">
+        Happy 85th Birthday Dad!{' '}
+        <span role="img" aria-label="birthday cake">
+          🎂
+        </span>
+      </h1>
       <div className="topbar__group topbar__group--right">
         <button
           type="button"

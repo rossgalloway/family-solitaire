@@ -6,12 +6,12 @@ describe('settingsStore — cardBack', () => {
     useSettingsStore.setState({ settings: defaultSettings() });
   });
 
-  it('defaults cardBack to navy', () => {
-    expect(defaultSettings().cardBack).toBe('navy');
+  it('defaults cardBack to the Tennis and Rosé design', () => {
+    expect(defaultSettings().cardBack).toBe('tennis-rose');
   });
 
-  it('CARD_BACKS lists the three designs in order', () => {
-    expect(CARD_BACKS).toEqual(['navy', 'crimson', 'emerald']);
+  it('CARD_BACKS lists the custom design first', () => {
+    expect(CARD_BACKS).toEqual(['tennis-rose', 'navy', 'crimson', 'emerald']);
   });
 
   it('update() patches cardBack', () => {
@@ -19,7 +19,7 @@ describe('settingsStore — cardBack', () => {
     expect(useSettingsStore.getState().settings.cardBack).toBe('crimson');
   });
 
-  it('hydrate() of a payload without cardBack falls back to navy', () => {
+  it('hydrate() of a payload without cardBack falls back to Tennis and Rosé', () => {
     const legacy = {
       schemaVersion: 1,
       drawCount: 1,
@@ -31,6 +31,6 @@ describe('settingsStore — cardBack', () => {
       language: 'en',
     } as unknown as Settings;
     useSettingsStore.getState().hydrate(legacy);
-    expect(useSettingsStore.getState().settings.cardBack).toBe('navy');
+    expect(useSettingsStore.getState().settings.cardBack).toBe('tennis-rose');
   });
 });

@@ -19,6 +19,7 @@ const en = {
   'menu.title': 'Menu',
   'menu.newGame': 'New Game',
   'menu.restart': 'Restart',
+  'menu.source': 'Source code (AGPL-3.0)',
 
   'stats.title': 'Statistics',
   'stats.wins': 'Wins',
@@ -117,6 +118,7 @@ const fr: Record<StringKey, string> = {
   'menu.title': 'Menu',
   'menu.newGame': 'Nouvelle partie',
   'menu.restart': 'Recommencer',
+  'menu.source': 'Code source (AGPL-3.0)',
 
   'stats.title': 'Statistiques',
   'stats.wins': 'Victoires',

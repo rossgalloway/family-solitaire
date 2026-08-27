@@ -57,6 +57,10 @@
 
 /* Design variants — background only. Defined after .card so they win the
    cascade over .card's --card-bg fill. */
+.card--back--tennis-rose {
+  background: #071d2b url('../assets/card-backs/tennis-rose.webp') center / cover no-repeat;
+}
+
 .card--back--navy {
   background:
     radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.18), transparent 50%),
@@ -106,6 +110,26 @@
   color: var(--card-black);
 }
 
+.card--face {
+  overflow: hidden;
+}
+
+.card__portrait {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Match the approved review-sheet placement without modifying the source art. */
+.card__portrait--red-ace {
+  transform: translateY(11%);
+}
+
 /* Single-row header: rank top-left, suit top-right. Sits high inside the
    ~26%-of-card-h fan strip so both indices read clearly on stacked cards. */
 .card__corner {
@@ -118,6 +142,7 @@
   justify-content: space-between;
   line-height: 1;
   pointer-events: none;
+  z-index: 1;
 }
 
 .card__rank {

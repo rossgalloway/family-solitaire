@@ -3,11 +3,32 @@ import { motion } from 'motion/react';
 import { Card as CardModel, color } from '@/game/card';
 import { SPRING_DEFAULT } from '@/motion/presets';
 import { useSettingsStore, CardBack } from '@/store/settingsStore';
+import aceBlackPortrait from '@/assets/family-court/ace-black.webp';
+import aceRedPortrait from '@/assets/family-court/ace-red.webp';
+import jackBlackPortrait from '@/assets/family-court/jack-black.webp';
+import jackRedPortrait from '@/assets/family-court/jack-red.webp';
+import kingPortrait from '@/assets/family-court/king.webp';
+import queenPortrait from '@/assets/family-court/queen.webp';
 import { Suit } from './Suit';
 import './Card.css';
 
 const RANK_LABEL: Record<number, string> = { 1: 'A', 11: 'J', 12: 'Q', 13: 'K' };
 const labelFor = (rank: number) => RANK_LABEL[rank] ?? String(rank);
+
+const FAMILY_PORTRAITS: Record<'red' | 'black', Partial<Record<number, string>>> = {
+  red: {
+    1: aceRedPortrait,
+    11: jackRedPortrait,
+    12: queenPortrait,
+    13: kingPortrait,
+  },
+  black: {
+    1: aceBlackPortrait,
+    11: jackBlackPortrait,
+    12: queenPortrait,
+    13: kingPortrait,
+  },
+};
 
 /* True for a single render after a drag-drop, so motion/react skips the
    layoutId fly-from-source animation (the card was visually at the cursor,
@@ -26,6 +47,7 @@ export type CardProps = {
 export function CardView({ card, ghost = false }: CardProps) {
   const c = color(card.suit);
   const label = labelFor(card.rank);
+  const portrait = FAMILY_PORTRAITS[c][card.rank];
   const skipLayoutAnim = useContext(SkipLayoutAnimContext);
   const animationsOn = useSettingsStore((s) => s.settings.animations);
   const cardBack = useSettingsStore((s) => s.settings.cardBack);
@@ -81,11 +103,19 @@ export function CardView({ card, ghost = false }: CardProps) {
           className={`card-flip__face card-flip__front card card--face card--${c}`}
           aria-hidden={!card.faceUp}
         >
+          {portrait && (
+            <img
+              className={`card__portrait${card.rank === 1 && c === 'red' ? ' card__portrait--red-ace' : ''}`}
+              src={portrait}
+              alt=""
+              draggable={false}
+            />
+          )}
           <div className="card__corner">
             <span className="card__rank">{label}</span>
             <Suit suit={card.suit} className="card__suit" />
           </div>
-          <Suit suit={card.suit} className="card__center" />
+          {!portrait && <Suit suit={card.suit} className="card__center" />}
         </div>
       </div>
     </motion.div>

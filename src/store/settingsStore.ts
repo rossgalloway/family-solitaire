@@ -3,10 +3,10 @@ import { immer } from 'zustand/middleware/immer';
 import { KEY_SETTINGS, loadKey, saveKey } from '@/persistence/db';
 import { detectInitialLang, Lang } from '@/i18n/strings';
 
-export type CardBack = 'navy' | 'crimson' | 'emerald';
+export type CardBack = 'tennis-rose' | 'navy' | 'crimson' | 'emerald';
 
 // Canonical order — shared by the picker UI and tests.
-export const CARD_BACKS: CardBack[] = ['navy', 'crimson', 'emerald'];
+export const CARD_BACKS: CardBack[] = ['tennis-rose', 'navy', 'crimson', 'emerald'];
 
 export type Settings = {
   schemaVersion: 1;
@@ -34,7 +34,7 @@ export const defaultSettings = (): Settings => ({
   haptics: true,
   animations: true,
   handedness: 'right',
-  cardBack: 'navy',
+  cardBack: 'tennis-rose',
   requireWinnable: false,
   language: detectInitialLang(),
 });

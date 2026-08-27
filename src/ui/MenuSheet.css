@@ -439,3 +439,22 @@
 .m-backup-feedback--err {
   color: #c98686;
 }
+
+.m-source-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 8px;
+  padding: 14px 0;
+  border-top: 1px solid var(--rule);
+  color: var(--ink-soft);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.m-source-link:hover {
+  color: var(--gold);
+}

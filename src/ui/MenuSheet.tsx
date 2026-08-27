@@ -304,7 +304,7 @@ function SettingsSection() {
               key={id}
               type="button"
               role="radio"
-              aria-label={id}
+              aria-label={id === 'tennis-rose' ? 'Tennis and Rosé' : id}
               aria-checked={settings.cardBack === id}
               className={`swatch card--back--${id}${
                 settings.cardBack === id ? ' is-active' : ''
@@ -418,6 +418,15 @@ export function MenuSheet({
       />
       <StatsSection />
       <SettingsSection />
+      <a
+        className="m-source-link"
+        href="https://github.com/rossgalloway/family-solitaire"
+        target="_blank"
+        rel="noreferrer"
+      >
+        <span>{t('menu.source')}</span>
+        <span aria-hidden="true">↗</span>
+      </a>
     </Sheet>
   );
 }

@@ -11,6 +11,10 @@
 /dist
 *.tsbuildinfo
 
+# Local family photos, source artwork, and design iterations. The production
+# app uses only the optimized assets under src/assets/.
+/artwork/
+
 # Capacitor native projects (android/ is tracked; ios/ is not yet committed)
 /ios
 .DS_Store

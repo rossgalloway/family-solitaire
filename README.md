@@ -1,6 +1,10 @@
-# Solitaire
+# Family Solitaire
 
-A simple Klondike solitaire that runs on the web and Android.
+A custom birthday edition of Klondike solitaire with an engraved family court,
+a tennis-and-rosé card back, and a birthday greeting for Dad's 85th.
+
+Based on [Paul Tran-Van's Solitaire](https://github.com/paultranvan/solitaire).
+It runs on the web and Android.
 NOT tested on iOS yet.
 
 ## Stack
@@ -67,3 +71,5 @@ Licensed under the **GNU Affero General Public License v3.0 or later**
 (AGPL-3.0-or-later) — see [LICENSE](LICENSE) for the full text.
 
 Copyright (C) 2026 Paul Tran-Van
+
+Birthday edition modifications Copyright (C) 2026 Ross Galloway

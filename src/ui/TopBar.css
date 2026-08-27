@@ -1,8 +1,9 @@
 .topbar {
-  height: var(--topbar-h);
-  display: flex;
+  min-height: var(--topbar-h);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  justify-content: space-between;
+  column-gap: 18px;
   /* Top padding floors at 8px so the buttons get visible breathing room on
      web (where --safe-top is 0). On native, --safe-top is set to the
      status-bar inset (≥56px on Android), which dominates and pushes the
@@ -33,6 +34,49 @@
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+.topbar__group--left {
+  justify-self: start;
+}
+
+.topbar__group--right {
+  justify-self: end;
+}
+
+.topbar__birthday {
+  margin: 0;
+  color: var(--gold);
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.015em;
+  line-height: 1.15;
+  text-align: center;
+  white-space: nowrap;
+}
+
+@media (max-width: 719px) {
+  .topbar {
+    grid-template-columns: 1fr 1fr;
+    row-gap: 7px;
+  }
+
+  .topbar__birthday {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    font-size: 15px;
+  }
+
+  .topbar__group--left {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .topbar__group--right {
+    grid-column: 2;
+    grid-row: 2;
+  }
 }
 
 @media (min-width: 720px) {

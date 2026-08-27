@@ -20,6 +20,7 @@ describe('Board', () => {
     expect(screen.getByLabelText('foundation 1')).toBeInTheDocument();
     expect(screen.getByLabelText('foundation 2')).toBeInTheDocument();
     expect(screen.getByLabelText('foundation 3')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Happy 85th Birthday Dad!/i })).toBeInTheDocument();
   });
 
   it('clicking the stock dispatches a draw move and updates the talon', () => {
@@ -39,6 +40,16 @@ describe('Board', () => {
     fireEvent.click(screen.getByLabelText(/recycle/i));
     // After recycle, talon empty, stock has one face-down card.
     expect(screen.queryByLabelText(/A of h/i)).toBeNull();
+  });
+
+  it('offers the deployed version source from the menu', () => {
+    render(<Board initial={blank()} />);
+    fireEvent.click(screen.getByLabelText('menu'));
+
+    expect(screen.getByRole('link', { name: /Source code \(AGPL-3.0\)/i })).toHaveAttribute(
+      'href',
+      'https://github.com/rossgalloway/family-solitaire',
+    );
   });
 
   describe('win duration', () => {

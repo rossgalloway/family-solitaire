@@ -44,3 +44,4 @@ resources/*.png
 # Unused PWA artifacts that capacitor-assets generates whether asked or not
 /icons/
 /public/manifest.webmanifest
+.vercel
